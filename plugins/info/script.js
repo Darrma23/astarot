@@ -19,6 +19,8 @@ let Izumi = async (m, {
             businessOwnerJid: global?.owner[0] + "@s.whatsapp.net",
             caption: `〆 ━━━[SCRIPT BOT]━━━〆
      々 No Di Jual / Ini Gratis Ygy
+     々 Astarot ft. Kashiwada & Linora
+     々 Yang aseli klik tomol dibawah
      々 Remake: ${global.ownername}
 〆 ━━━━━━━━━━━━━〆`,
             footer: global?.botname,

@@ -18,6 +18,10 @@ import fs from 'fs'
 import chalk from 'chalk'
 import { fileURLToPath } from 'url'
 import moment from 'moment-timezone'
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /*============= WAKTU =============*/
 let wibh = moment.tz('Asia/Jakarta').format('HH')
@@ -82,7 +86,7 @@ global.menu = {
          title: global.botname,
          body: global.ownername,
          mediaType: 1,
-         thumbnail: fs.readFileSync('./media/thumbnail.jpg'),
+		 thumbnail: fs.readFileSync(path.join(__dirname, 'media/thumbnail.jpg')),
          sourceUrl: global.apikey,
          renderLargerThumbnail: true
       }
@@ -150,7 +154,7 @@ global.adReply = {
          title: global.botname,
          body: global.ownername,
          mediaType: 1,
-         thumbnail: fs.readFileSync('./media/thumbnail2.jpg'),
+		 thumbnail: fs.readFileSync(path.join(__dirname, 'media/thumbnail2.jpg')),
          sourceUrl: global.apikey,
          renderLargerThumbnail: false
       }

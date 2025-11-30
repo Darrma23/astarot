@@ -21,10 +21,11 @@ import './config.js'
 import path, { join } from 'path'
 import pino from 'pino'
 import ws from 'ws'
+import syntaxerror from 'syntax-error'
 import chalk from 'chalk'
 import { platform } from 'process'
 import { fileURLToPath, pathToFileURL } from 'url'
-import { createRequire } from 'module' // Bring in the ability to create the 'require' method
+import { createRequire } from 'module'
 import {
   readdirSync,
   statSync,
@@ -87,8 +88,6 @@ const connectionOptions = {
         level: 'silent'
     }),
     printQRInTerminal: false,
-    // Optional If Linked Device Could'nt Connected
-    // browser: ['Mac OS', 'chrome', '125.0.6422.53']
     browser: Browsers.ubuntu("Safari"),
     auth: {
         creds: state.creds,
@@ -122,8 +121,7 @@ const connectionOptions = {
     },
     connectTimeoutMs: 60000,
     defaultQueryTimeoutMs: 0,
-    generateHighQualityLinkPreview: true,
-    syncFullHistory: false,
+    syncFullHistory: true,
     markOnlineOnConnect: false
 }
 
@@ -154,7 +152,6 @@ async function connectionUpdate(update) {
         conn.logger.warn('Nomor Kamu Kena Banned Session Logout / Kalo Bukan Cek Version Di Socket')
     }
     if (global.db.data == null) await loadDatabase()
-    // console.log(JSON.stringify(update, null, 4))
 }
 
 if (!conn.authState.creds.registered) {
@@ -205,26 +202,19 @@ conn.ev.on("connection.update", async (update) => {
     }
 });
 
-//=====[ Setelah Pembaruan Koneksi ]========//
 conn.ev.on("creds.update", saveCreds);
-
-// let strQuot = /(["'])(?:(?=(\\?))\2.)*?\1/
 
 let isInit = true
 let handler = await import('./handler.js')
 global.reloadHandler = async function (restatConn) {
-  /*try {
-      const Handler = await import(`./handler.js?update=${Date.now()}`).catch(console.error)*/
+
   try {
-    // Jika anda menggunakan replit, gunakan yang sevenHoursLater dan tambahkan // pada const Handler
-    // Default: server/vps/panel, replit + 7 jam buat jam indonesia Jika Tidak Faham Pakai Milidetik 3600000 = 1 Jam Dan Kalikan 7 = 25200000
-    // const sevenHoursLater = Dateindonesia 7 * 60 * 60 * 1000;
     const Handler = await import(`./handler.js?update=${Date.now()}`).catch(console.error)
-    // const Handler = await import(`./handler.js?update=${sevenHoursLater}`).catch(console.error)
     if(Object.keys(Handler || {}).length) handler = Handler
   } catch (e) {
     console.error(e)
   }
+
   if(restatConn) {
     const oldChats = global.conn.chats
     try { global.conn.ws.close() } catch { }
@@ -232,6 +222,7 @@ global.reloadHandler = async function (restatConn) {
     global.conn = makeWASocket(connectionOptions, { chats: oldChats })
     isInit = true
   }
+
   if(!isInit) {
     conn.ev.off('messages.upsert', conn.handler)
     conn.ev.off('group-participants.update', conn.participantsUpdate)
@@ -273,7 +264,6 @@ global.reloadHandler = async function (restatConn) {
   conn.ev.on('creds.update', conn.credsUpdate)
   isInit = false
   return true
-
 }
 
 async function loadingPlugin() {
@@ -288,16 +278,22 @@ async function loadingPlugin() {
     await pg.watch();
     setInterval(async () => {
         await pg.load();
-    }, 15000);
+    }, 2000);
 }
 
 loadingPlugin()
     .then(() => conn.logger.info("✅ Plugin Udah Berhasil Loader"))
     .catch((err) => conn.logger.error("❌ Gagal load plugin:", err));
+
 await global.reloadHandler()
 
-// Quick Test
+conn.ev.on('messages.upsert', async (msg) => {
+    const m = msg.messages[0]
+    if (!m?.message || m.key.fromMe) return
+    await conn.readMessages([m.key])
+})
 
+// Quick Test
 async function _quickTest() {
   let test = await Promise.all([
     spawn('ffmpeg'),
@@ -340,12 +336,14 @@ async function _quickTest() {
   }
 
   if(s.ffmpeg && !s.ffmpegWebp) {
-    conn.logger.warn('Sticker Mungkin Tidak Beranimasi tanpa libwebp di ffmpeg (--enable-libwebp while compiling ffmpeg)');
+    conn.logger.warn('Sticker Mungkin Tidak Beranimasi tanpa libwebp di ffmpeg');
   }
 
   if(!s.convert && !s.magick && !s.gm) {
-    conn.logger.warn('Fitur Stiker Mungkin Tidak Bekerja Tanpa imagemagick dan libwebp di ffmpeg belum terinstall (pkg install imagemagick)');
+    conn.logger.warn('Fitur Stiker Mungkin Tidak Bekerja Tanpa imagemagick dan libwebp');
   }
 }
 
-_quickTest().then(() => conn.logger.info('☑️ Quick Test Done , nama file session ~> creds.json')).catch(console.error);
+_quickTest()
+  .then(() => conn.logger.info('☑️ Quick Test Done , nama file session ~> creds.json'))
+  .catch(console.error);

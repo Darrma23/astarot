@@ -1,18 +1,12 @@
-const izumi = async (m) => {
+let handler = async (m, { conn }) => {
     const start = performance.now();
-    
-    // hitung delay internal 
-    await Promise.resolve();
-
-    const ping = Math.round(performance.now() - start);
-
-    m.reply(
-        Func.Styles(`☘️ Pong!\nResponse time: ${ping}ms`)
-    );
+    const end = performance.now();
+    const ping = (end - start).toFixed(4);
+    await conn.sendMessage(m.chat, { text: `PONG: ${ping} ms` }, { quoted: m });
 };
 
-izumi.command = ['ping'];
-izumi.help = ['ping'];
-izumi.tags = ['run'];
+handler.help = ["ping"];
+handler.tags = ["info"];
+handler.command = /^(ping)$/i;
 
-export default izumi;
+export default handler;

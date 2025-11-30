@@ -13,6 +13,7 @@ const izuku = async (m, {
     const tiktokRegex = /https?:\/\/(?:www\.|vm\.|vt\.)?tiktok\.com\/(?:@[\w.-]+\/video\/\d+|[\w.-]+\/video\/\d+|\w+|t\/\w+)/i;
     const hasTiktokLink = tiktokRegex.test(text) || null;
     if (!hasTiktokLink) throw `Maaf Anda Masukkan Link Dulu Contoh ${usedPrefix + command} https://vt.tiktok.com/xxxx`;
+    await global.wait(m, conn);
 
     let url;
     if (hasTiktokLink) {
@@ -104,12 +105,12 @@ const izuku = async (m, {
     } else {
         m.reply('❌Maaf Gada Link Gabisa Dl')
     };
+    await global.wait(m, conn, true);
 };
 
 izuku.help = ['tiktok', 'ttdl', 'tt', 'tiktokdl'].map(v => `${v} *[ Link TikTok ]* `);
 izuku.tags = ['downloader'];
 izuku.command = ['tiktok', 'ttdl', 'tt', 'tiktokdl'];
-izuku.loading = true;
 izuku.limit = true;
 
 export default izuku;

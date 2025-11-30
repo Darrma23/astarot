@@ -22,7 +22,6 @@ import { unwatchFile, watchFile } from 'fs'
 import chalk from 'chalk'
 import moment from 'moment-timezone'
 import util from 'util'
-import knights from 'knights-canvas'
 
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 
