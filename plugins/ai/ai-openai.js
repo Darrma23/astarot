@@ -10,7 +10,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         // start runtime
         const start = performance.now();
 
-        const apiUrl = `https://api.ootaizumi.web.id/ai/gemini?text=${encodeURIComponent(text)}&sesi=libie`;
+        // API BARU
+        const apiUrl = `https://api.ootaizumi.web.id/ai/gemini?text=${encodeURIComponent(text)}&sesi=astarot`;
         const response = await fetch(apiUrl);
 
         if (!response.ok) return m.reply("Request gagal. Silakan coba lagi nanti.");
