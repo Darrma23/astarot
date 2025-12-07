@@ -1,61 +1,37 @@
-let handler = async (m, { conn, text, usedPrefix, command }) => {
-    try {
-        if (!text)
-            return m.reply(
-                `Masukkan pertanyaanmu.\n› Contoh: ${usedPrefix + command} Apa itu Kecerdasan Buatan?`
-            );
+let handler = async (m, { conn, usedPrefix, command, text }) => {
+    await global.wait(m, conn);
 
-        await global.wait(m, conn);
-
-        // start runtime
-        const start = performance.now();
-
-        // API BARU
-        const apiUrl = `https://api.ootaizumi.web.id/ai/gemini?text=${encodeURIComponent(text)}&sesi=astarot`;
-        const response = await fetch(apiUrl);
-
-        if (!response.ok) return m.reply("Request gagal. Silakan coba lagi nanti.");
-
-        const json = await response.json();
-
-        // format baru:
-        // { status: true, message: "jawaban..." }
-        if (!json.status || !json.message)
-            return m.reply("Tidak ada respons dari API.");
-
-        const reply = json.message.trim();
-
-        // end runtime
-        const end = performance.now();
-        const runtime = ((end - start) / 1000).toFixed(2);
-
-        await conn.sendMessage(
-            m.chat,
-            {
-                text: reply,
-                contextInfo: {
-                    externalAdReply: {
-                        title: global.botname,
-                        body: '',
-                        thumbnailUrl: "https://qu.ax/zcLin.jpg",
-                        sourceUrl: " ",
-                        renderLargerThumbnail: false
-                    }
-                }
-            },
-            { quoted: m }
+    // input wajib
+    let prompt = text?.trim();
+    if (!prompt) {
+        return m.reply(
+            `mana promtnya?`
         );
-
-    } catch (e) {
-        conn.logger.error(e);
-        m.reply(`Terjadi error: ${e.message}`);
-    } finally {
-        await global.wait(m, conn, true);
     }
+
+    const base = "https://api.nekolabs.web.id/text-generation/ai4chat";
+    const params = new URLSearchParams({ text: prompt });
+    const url = `${base}?${params.toString()}`;
+
+    let result = "Terjadi kesalahan.";
+    try {
+        let res = await fetch(url);
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+
+        let json = await res.json();
+        if (!json.success) throw new Error(json.message || "unknown response");
+
+        result = json.result;
+    } catch (err) {
+        result = `❌ Error: ${err.message}`;
+    }
+
+    await m.reply(result);
+    await global.wait(m, conn, true);
 };
 
 handler.help = ["ai"];
 handler.tags = ["ai"];
-handler.command = /^(ai|openai)$/i;
+handler.command = /^(ai)$/i;
 
 export default handler;
