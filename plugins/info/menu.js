@@ -188,9 +188,9 @@ ${teksdx}`;
     }
 };
 
-handler.help = [];
+handler.help = ["menu" ];
 handler.command = ["menu", "rinmenu"];
-handler.tags = ["run"];
+handler.tags = ["info"];
 
 const menuBut = async (m, conn, text) => {
     const url = await conn.profilePictureUrl(num, 'image');
