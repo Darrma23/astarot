@@ -396,20 +396,20 @@ export async function handler(chatUpdate) {
                                 usersli.limit -= plugin.limit
                                 conn.reply(
                                     m.chat,
-                                    `> 🍀 Kashiwada: Limit Mu Tinggal: ${usersli.limit}\n> 💢 Oota: LAIN KALI JANGAN BOROS\n> 🍀 Kashiwada: Oota-kun, Jangan Marah Marah lah lagian, cuman limit doang....`,
+                                    `> 🍀 Limit Mu Tinggal: ${usersli.limit}`,
                                     m
                                 )
                                 if (usersli.limit === plugin.limit) {
                                     conn.reply(
                                         m.chat,
-                                        `> 🍞 Oota-kun: Kan Limit Mu: ${usersli.limit},\n> 🍀 Kashiwada: Yaudahlah Limit Mu Dikit Nunggu Riset Jam: 2:00`,
+                                        `> 🍞 Kan Limit Mu: ${usersli.limit},\n> 🍀 Yaudahlah Limit Mu Dikit Nunggu Riset Jam: 2:00`,
                                         m
                                     )
                                 }
                             } else {
                                 conn.reply(
                                     m.chat,
-                                    `> 🍀 Kashiwada: Yaah Limit Mu Habis...\n> 💢 Oota: Mangka Nya Jangan Boros Sayang Tuh Limit`,
+                                    `> 🍀 Yaah Limit Mu Habis...\n> 💢 Mangka Nya Jangan Boros Sayang Tuh Limit`,
                                     m
                                 )
                             }
