@@ -1,21 +1,21 @@
 
 <p align="center">
-  <img src="https://qu.ax/bEhDy.jpg" width="250"/>
+  <img src="https://files.catbox.moe/sduiyj.jpg" width="250"/>
 </p>
 
-<h1 align="center">Kashiwada-MultiDevice - WhatsApp Bot</h1>
+<h1 align="center">Astarot-MultiDevice - WhatsApp Bot</h1>
 
 
 ---
 
 ## 👤 Owner
 
-> GitHub: [izuku-mii](https://github.com/izuku-mii.png)  
-> Project: **Kashiwada-MultiDevice WhatsApp Bot**
+> GitHub: [Darrma23](https://github.com/darrma23.png)  
+> Project: **Astarot-MultiDevice WhatsApp Bot**
 
 ---
 
-> Bot WhatsApp modular yang kuat menggunakan JavaScript, dibuat dengan sistem plugin untuk fleksibilitas maksimal. Terinspirasi oleh **Kashiwada-san** dari *Kao ni Denai Kashiwada-san to Kao ni Deru Oota-kun*, bot ini menghadirkan semangat dan disiplin dalam obrolan Anda!
+> Bot WhatsApp modular yang kuat menggunakan JavaScript, dibuat dengan sistem plugin untuk fleksibilitas maksimal.
 
 ---
 
@@ -29,26 +29,12 @@
 
 ---
 
-## ⚙️ nama config.expired.js ganti ke config.js
-## ⚙️ nama database.expired.js ganti ke database.js
-
 ## ⚙️ Install
 ```bash
-$ git clone https://github.com/izuku-mii/Kashiwada-MultiDevice
-$ cd Kashiwada-MultiDevice
+$ git clone https://github.com/darrma23/astarot
+$ cd astarot
 $ npm install
 $ npm start
-```
-
-## ⚙️ Kalo Play Sama Fitur Downloader YouTube Ku Saranin Vps Nya Legal Atau Bagus Kalo Do Gini
-```tutorial
-1. Download Firefox atau Browser Lain
-2. Download Extension get cookies.txt Locally
-3. login akun yt mu di browser https://m.youtube.com
-4. Buka Extension get cookies.txt Locally, pencet copy
-5. Taro Di file cookies.js tadi
-
-Selamat Mencoba Ingat Jangan Malas Yang Malas Atur Sendiri😒
 ```
 
 ## 🌐 Example Plugin File
@@ -124,8 +110,8 @@ export default handler;
 ---
 
 ### Thx Atau Fungsi Di Script Atau Fitur
-| [![ShirokamiRyzen](https://github.com/ShirokamiRyzen.png?size=100)](https://github.com/ShirokamiRyzen) | [![naruyaizumi](https://github.com/naruyaizumi.png?size=100)](https://github.com/naruyaizumi) | [![AndhikaGG](https://github.com/AndhikaGG.png?size=100)](https://github.com/AndhikaGG) |
+| [![ShirokamiRyzen](https://github.com/ShirokamiRyzen.png?size=100)](https://github.com/ShirokamiRyzen) | [![naruyaizumi](https://github.com/naruyaizumi.png?size=100)](https://github.com/naruyaizumi) | [![AndhikaGG](https://github.com/Darrma23.png?size=100)](https://github.com/Darrma23) |
 |:--:|:--:|:--:|
-| **[ShirokamiRyzen](https://github.com/ShirokamiRyzen)**<br/>Base Original | **[naruyaizumi](https://github.com/naruyaizumi)**<br/>Fungsi Base / Fungsi Di Script | **[AndhikaGG](https://github.com/AndhikaGG)**<br/>Penyumbang fitur |
+| **[ShirokamiRyzen](https://github.com/ShirokamiRyzen)**<br/>Base Original | **[naruyaizumi](https://github.com/naruyaizumi)**<br/>Fungsi Base / Fungsi Di Script | **[Darma](https://github.com/darrma23)**<br/>Penambah Fitur |
 
 > *"Hmmm...."*

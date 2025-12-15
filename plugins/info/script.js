@@ -19,16 +19,15 @@ let Izumi = async (m, {
             businessOwnerJid: global?.owner[0] + "@s.whatsapp.net",
             caption: `〆 ━━━[SCRIPT BOT]━━━〆
      々 No Di Jual / Ini Gratis Ygy
-     々 Astarot ft. Kashiwada & Linora
+     々 Astarot ft. Kashiwada & Liora
      々 Yang aseli klik tomol dibawah
-     々 Remake: ${global.ownername}
 〆 ━━━━━━━━━━━━━〆`,
             footer: global?.botname,
             buttons: [{
                 name: 'cta_url',
                 buttonParamsJson: JSON.stringify({
-                    display_text: 'Script Bot Wa',
-                    url: 'https://github.com/izuku-mii/Kashiwada-MultiDevice'
+                    display_text: 'Script Astarot',
+                    url: 'https://github.com/darrma23/astarot'
                 })
             }],
             hasMediaAttachment: false // or true

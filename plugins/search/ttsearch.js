@@ -24,7 +24,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
       const item = results[i];
 
       const caption = `
-Judul: ${item.title || "-"}
 Author: ${item.author?.name || "-"} (@${item.author?.username || "-"})
 Audio: ${item.music_info?.title || "-"} — ${item.music_info?.author || "-"}
 
@@ -57,14 +56,14 @@ Tanggal: ${item.create_at || "-"}
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
               display_text: "⬇️ Unduh Video",
-              id: `${usedPrefix}ttdl ${item.videoUrl}`
+              id: `${usedPrefix}get ${item.videoUrl}`
             })
           },
           {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
               display_text: "🎵 Unduh Audio",
-              id: `${usedPrefix}ytaudio ${item.musicUrl || item.videoUrl}`
+              id: `${usedPrefix}get ${item.musicUrl || item.videoUrl}`
             })
           }
         ]
