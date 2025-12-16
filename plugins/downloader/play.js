@@ -1,4 +1,5 @@
 import convert from "../../lib/toAll.js";
+import { youtubeCanvas } from "../../lib/canvas-play.js";
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     if (!args[0])
@@ -14,14 +15,28 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
         const { title, channel, cover, url, downloadUrl } = result;
 
+        // ===== AUDIO =====
         const audioRes = await fetch(downloadUrl);
-        if (!audioRes.ok) throw new Error(`Gagal mengambil audio (${audioRes.status})`);
+        if (!audioRes.ok)
+            throw new Error(`Gagal mengambil audio (${audioRes.status})`);
 
         const audioBuffer = Buffer.from(await audioRes.arrayBuffer());
-
-        const converted = await convert.toVN(audioBuffer); // gunakan toAll.js dengan format VN
+        const converted = await convert.toVN(audioBuffer);
         const waveform = await convert.generateWaveform(converted);
 
+        // ===== CANVAS DARK THUMBNAIL =====
+        let thumb;
+        try {
+            thumb = await youtubeCanvas(
+                cover,
+                title,
+                channel
+            );
+        } catch {
+            thumb = null;
+        }
+
+        // ===== SEND MESSAGE =====
         await conn.sendMessage(
             m.chat,
             {
@@ -33,9 +48,9 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
                     externalAdReply: {
                         title,
                         body: channel,
-                        thumbnailUrl: cover,
+                        thumbnail: thumb, // 🔥 BUFFER dari canvas
                         mediaUrl: url,
-                        mediaType: 2,
+                        mediaType: 1,
                         renderLargerThumbnail: true,
                     },
                 },
@@ -55,10 +70,6 @@ handler.tags = ["downloader"];
 handler.command = /^(play)$/i;
 
 export default handler;
-
-/* ===================================== */
-/*            PLAY FUNCTION              */
-/* ===================================== */
 
 async function play(query) {
     const encoded = encodeURIComponent(query.trim());
