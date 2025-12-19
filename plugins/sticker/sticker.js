@@ -1,30 +1,34 @@
-import sticker from '../../lib/sticker.js';
+import sticker from "../../lib/sticker.js";
 
 let Izumi = async (m, { conn }) => {
-  const q = m.quoted ? m.quoted : m;
-  let msg = q.msg || q;
+  const q = m.quoted || m;
+  const mime = q.mimetype || q.msg?.mimetype || "";
 
-  if (!msg.mimetype) return m.reply(' ⚠️ Masukan Video / Image Buat Sticker !');
-
-  let st = {
-    packName: `╭───── ( ${global?.botname} ) ─────
-│ -(AUTHOR)-: ${global?.ownername}
-│ -(WEB)-: ${global?.web}
-╰──────────────`
-  };
+  if (!mime)
+    return m.reply("⚠️ Masukan gambar atau video buat sticker!");
 
   const buffer = await q.download();
 
-  if (/image/.test(msg.mimetype)) {
-    const stik = await sticker.writeExif({ data: buffer }, { ...st });
-    await conn.sendMessage(m.chat, { sticker: stik }, { quoted: m });
-  } else if (/video/.test(msg.mimetype)) {
-    if (msg.seconds > 10) return m.reply(' ⚠️ Masukan Video Max 10 Detik !');
-    const stik = await sticker.writeExif({ data: buffer }, { ...st });
-    await conn.sendMessage(m.chat, { sticker: stik }, { quoted: m });
-  } else {
-    m.reply(' ⚠️ Gada Type Buat Sticker Video/Image!');
+  const exif = {
+    packName: `Stickerly by ${global.botname}`,
+  };
+
+  // IMAGE
+  if (/image\/(jpe?g|png|webp)/i.test(mime)) {
+    const stik = await sticker.writeExif({ data: buffer }, exif);
+    return conn.sendMessage(m.chat, { sticker: stik }, { quoted: m });
   }
+
+  // VIDEO
+  if (/video\/(mp4|webm|gif)/i.test(mime)) {
+    if ((q.seconds || 0) > 10)
+      return m.reply("⚠️ Video maksimal 10 detik!");
+
+    const stik = await sticker.writeExif({ data: buffer }, exif);
+    return conn.sendMessage(m.chat, { sticker: stik }, { quoted: m });
+  }
+
+  return m.reply("⚠️ Format tidak didukung. Kirim image atau video.");
 };
 
 Izumi.command = /^(s|sticker|stiker)$/i;
