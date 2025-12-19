@@ -1,42 +1,47 @@
-import axios from 'axios';
-import bu from '../../lib/sticker.js';
+import axios from "axios";
+import { Sticker } from "wa-sticker-formatter";
 
 let izuku = async (m, { conn, text }) => {
-  if (!text) throw ' *[ ! ]* Masukan Teks Nya !';
-  // mulai loading / typing indicator
+  if (!text) throw " *[ ! ]* Masukan teksnya.";
+
   await global.wait(m, conn);
 
   try {
-    const url = `${global?.apikey?.izumi}/generator/brat`;
-    const res = await axios.get(url, {
+    const api = "https://api.nekolabs.web.id/canvas/brat/v1";
+
+    const res = await axios.get(api, {
       params: { text },
-      responseType: 'arraybuffer'
+      responseType: "arraybuffer"
     });
 
-    // res.data adalah ArrayBuffer / Buffer
-    const buffer = res.data;
+    const buffer = Buffer.from(res.data);
 
-    const packName = `- Project ${global?.botname ?? 'Bot'} || Owner By: ${global?.ownername ?? 'Owner'} -`;
-    const sticker = await bu.writeExif({ data: buffer }, { packName });
+    const sticker = new Sticker(buffer, {
+      pack: "Brat Sticker",
+      author: global?.botname ?? "Bot",
+      type: "full",
+      quality: 90
+    });
 
-    // kirim sticker
-    const sent = await conn.sendMessage(m.chat, { sticker }, { quoted: m });
-    return sent;
+    const stickerFinal = await sticker.toBuffer();
+
+    await conn.sendMessage(
+      m.chat,
+      { sticker: stickerFinal },
+      { quoted: m }
+    );
+
   } catch (err) {
-    console.error('izuku generator error:', err);
-    // Pesan error yang lebih ramah pengguna
-    throw ' *[ ! ]* Maaf, kemungkinan server sibuk atau batas request tercapai. Coba lagi nanti.';
+    console.error("brat error:", err);
+    throw " *[ ! ]* Server error atau API limit. Coba lagi nanti.";
   } finally {
-    // hentikan loading / typing indicator
     await global.wait(m, conn, true);
   }
 };
 
-izuku.limit = true;
-izuku.loading = true;
-
-izuku.help = ['brat', 'bratgenerator'];
+izuku.help = ["brat", "bratgenerator"];
+izuku.tags = ["sticker"];
 izuku.command = /^(brat|bratgenerator)$/i;
-izuku.tags = ['sticker'];
+izuku.limit = true;
 
 export default izuku;
