@@ -347,7 +347,7 @@ Report Time: ${new Date().toLocaleString("id-ID")}
                 externalAdReply: {
                     title: "System Monitoring Report",
                     body: "Detailed server and bot metrics",
-                    thumbnailUrl: "https://qu.ax/syOjg.jpg",
+                    thumbnailUrl: "https://files.catbox.moe/wdn98f.png",
                     mediaType: 1,
                     renderLargerThumbnail: true,
                 },

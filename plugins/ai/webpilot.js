@@ -22,7 +22,7 @@ let handler = async (m, { conn, text }) => {
 
 handler.help = ["web <query>"];
 handler.tags = ["internet"];
-handler.command = /^webpilot|web$/i;
+handler.command = /^(webpilot|web)$/i;
 
 export default handler;
 
