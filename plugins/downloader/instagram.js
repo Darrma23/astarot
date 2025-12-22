@@ -1,93 +1,73 @@
-let old = new Date()
-import axios from "axios"
+/**
+ ╔══════════════════════
+    ❏ 『instagram — downloader』
+╚══════════════════════
 
-export default async function izuku(m, {
-  conn,
-  text,
-  usedPrefix,
-  command,
-  args
-}) {
-  if (!args[0])
-    return m.reply(
-      `Masukin link Instagram.\nContoh:\n${usedPrefix + command} https://www.instagram.com/p/xxxx`
-    )
+  ✧ Type     : Plugin ESM
+  ✧ Source   : https://whatsapp.com/channel/0029VbBDUSa90x2qZ82Niw2h
+  ✧ Creator  : sxZeclips
+  ✧ API   : [ https://izukumii-instagram-api.hf.space/ ]
+  ✧ Note : Story belum fully support, tapi vid + image (album) aman
+*/
 
-  if (!args[0].includes("instagram.com"))
-    return m.reply("Itu bukan link Instagram. Jangan ngelantur.")
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+    try {
+        if (!text) {
+            return m.reply(`*Contoh:*\n${usedPrefix + command} https://www.instagram.com/reel/xxxx`);
+        }
 
-  try {
-  	await global.wait(m, conn);
-    const { data } = await axios.get(
-      "https://api.nekolabs.my.id/downloader/instagram",
-      {
-        params: { url: args[0] }
-      }
-    )
+        await global.wait(m, conn);
 
-    if (!data.success) throw "API Nekolabs lagi bad mood"
+        let url = text.trim();
 
-    const { metadata, downloadUrl } = data.result
-    const process = (new Date() - old) + " ms"
+        if (!/instagram\.com/i.test(url)) {
+            return m.reply(`🍂 *URL tidak valid.*`);
+        }
 
-    const caption = `
-👤 ${metadata.username}
-❤️ ${metadata.like}   💬 ${metadata.comment}
+        if (/instagram\.com\/stories\//i.test(url)) {
+            return m.reply(`🍂 *Instagram Story belum didukung.*\nGunakan link *Post / Reel / Album*.`);
+        }
 
-${metadata.caption || ""}
-⏱️ ${process}
-`.trim()
+        let api = `https://izukumii-instagram-api.hf.space/?url=${encodeURIComponent(url)}`;
+        let res = await fetch(api);
 
-    // ===== VIDEO =====
-    if (metadata.isVideo) {
-      return conn.sendFile(
-        m.chat,
-        downloadUrl[0],
-        "instagram.mp4",
-        caption,
-        m
-      )
+        if (!res.ok) {
+            return m.reply(`🍂 *Gagal mengambil data.*`);
+        }
+
+        let json = await res.json();
+
+        if (json.status !== 200 || !Array.isArray(json.download) || !json.download.length) {
+            return m.reply(`🍂 *Media tidak ditemukan.*`);
+        }
+
+        for (let media of json.download) {
+            let isVideo = /\.(mp4|mov|webm)/i.test(media);
+
+            if (isVideo) {
+                await conn.sendMessage(
+                    m.chat,
+                    { video: { url: media } },
+                    { quoted: m }
+                );
+            } else {
+                await conn.sendMessage(
+                    m.chat,
+                    { image: { url: media } },
+                    { quoted: m }
+                );
+            }
+        }
+    } catch (e) {
+        await m.reply(`🍂 *Terjadi kesalahan.*`);
+    } finally {
+    	await global.wait?.(m, conn, true);
     }
+};
 
-    // ===== FOTO / SLIDE =====
-    if (downloadUrl.length > 1) {
-      const album = downloadUrl.map(v => ({
-        image: { url: v },
-        caption
-      }))
+handler.help = ["instagram"];
+handler.tags = ["downloader"];
+handler.command = /^(ig|instagram|igdl)$/i;
+handler.limit = true;
 
-      const sent = await conn.sendAlbum(m.chat, album, {
-        delay: 500,
-        quoted: m
-      })
-
-      return conn.reply(
-        m.chat,
-        `Selesai.\n⏱️ ${process}`,
-        sent
-      )
-    }
-
-    // ===== SINGLE FOTO =====
-    return conn.sendMessage(
-      m.chat,
-      {
-        image: { url: downloadUrl[0] },
-        caption
-      },
-      { quoted: m }
-    )
-
-  } catch (e) {
-    console.error(e)
-    m.reply("❌ Error. Nekolabs capek atau IG lagi pelit.")
-  }
-  await global.wait(m, conn, true);
-}
-
-izuku.help = ["instagram", "ig", "igdl"].map(
-  v => `${v} <link instagram>`
-)
-izuku.tags = ["downloader"]
-izuku.command = ["instagram", "ig", "igdl"]
-izuku.limit = true
+export default handler;
