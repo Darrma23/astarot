@@ -12,7 +12,7 @@ let handler = async (m, { conn }) => {
 };
 
 handler.help = ["debug"];
-handler.tags = ["tool"];
+handler.tags = ["tools"];
 handler.command = /^(getq|q|debug)$/i;
 handler.owner = true;
 

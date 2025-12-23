@@ -18,7 +18,7 @@ let handler = async (m, { teks, conn, args }) => {
 
 handler.help = ["kick", "kik", "dor", "kon"].map((a) => a + " *[reply/tag user]*");
 handler.tags = ["group"];
-handler.command = ["kick", "kik", "dor", "kon"];
+handler.command = ["kick", "kik", "dor", "k", "kon"];
 handler.admin = true;
 handler.group = true;
 handler.botAdmin = true;

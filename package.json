@@ -38,6 +38,7 @@
     "dependencies": {
         "@adiwajshing/baileys": "npm:@periskope/baileys@7.0.0-rc9-alpha-6",
         "@napi-rs/canvas": "^0.1.84",
+        "aki-api": "^7.0.1",
         "archiver": "^7.0.1",
         "awesome-phonenumber": "^5.10.0",
         "axios": "^1.13.2",

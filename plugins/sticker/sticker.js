@@ -10,7 +10,7 @@ let Izumi = async (m, { conn }) => {
   const buffer = await q.download();
 
   const exif = {
-    packName: `Stickerly by ${global.botname}`,
+    packName: `Stiker by ${global.botname}`,
   };
 
   // IMAGE
